@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  log-queue-api:
+    image: 'at/log-queue-api:latest'
+    build:
+      context: .
+      args:
+        PYTHON_IMAGE_TAG: "4.8.2"
+    command: ''
+    tty: true
