@@ -10,3 +10,5 @@ dependencies:
   - pytest-cov=2.*
   - pre-commit=2.*
   - black=21.*
+  - jupyterlab
+  - pandas
