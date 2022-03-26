@@ -1,6 +1,64 @@
 # Log Queue API
 
-Process event like data
+## About the Project
+
+In this project, I am going to build a service that can process data from events. There are two types of events:
+
+1. User Events
+2. Organization Events
+
+To process these events, I will implement a log / a message queue. I have no prior experience with stream processing or with Kafka, but I will use this opportunity to explore Kafka.
+
+There is going to be a service that aggregates the data and enables to fetch data through http get requests. 
+
+The GET request should only hold the latest state of the user. It should consume
+that data, combine it and hold it in memory until it will be fetched from it
+
+## The raw src data
+
+As mentionned above, there are two data sources: User Events and Organization Events. Here are two samples:
+
+
+### Organization Events
+
+The following data is emitted when a new organization is created:
+
+```json
+[
+  {
+    "organization_key": "ff3959a49ac10fc70181bc00e308fbeb",
+    "organization_name": "Metal Gear Solid",
+    "organization_tier": "Medium",
+    "created_at": "2018-01-24 17:28:09.000000"
+  },
+  ...
+]
+```
+
+### User Event
+
+Whenever there is a change to user data, the following event will be emitted. 
+
+There are three event_types: 
+
+1. User Created
+2. User Deleted
+3. User Updated
+
+```json
+[
+  {
+    "id": "069feb770fe581acc9d3313d59780196",
+    "event_type": "User Created",
+    "username": "Snake",
+    "user_email": "snake@outerheaven.com",
+    "user_type": "Admin",
+    "organization_name": "Metal Gear Solid",
+    "received_at": "2020-12-08 20:03:16.759617"
+  },
+  ...
+]
+```
 
 ## Getting Started
 
