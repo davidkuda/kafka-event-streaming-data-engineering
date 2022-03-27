@@ -25,5 +25,10 @@ def produce(topic: str, key: str, value: str):
     kafka_io.push(topic, key, value)
 
 
+@app.command()
+def subscribe(topic: str):
+    kafka_io.subscribe(topic)
+
+
 if __name__ == "__main__":
     app()
