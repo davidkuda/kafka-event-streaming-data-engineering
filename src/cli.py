@@ -20,5 +20,10 @@ def teardown():
     kafka_io.delete_topics(topics)
 
 
+@app.command()
+def produce(topic: str, key: str, value: str):
+    kafka_io.push(topic, key, value)
+
+
 if __name__ == "__main__":
     app()
