@@ -9,3 +9,4 @@ dependencies:
   - fastapi
   - uvicorn[standard]
   - pydantic
+  - python-confluent-kafka 
