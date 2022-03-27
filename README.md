@@ -11,8 +11,13 @@ To process these events, I will implement a log / a message queue. I have no pri
 
 There is going to be a service that aggregates the data and enables to fetch data through http get requests. 
 
-The GET request should only hold the latest state of the user. It should consume
-that data, combine it and hold it in memory until it will be fetched from it
+## The Design of The App
+
+![The design of the kafka data app](https://images.ctfassets.net/pedj0c0bs6fa/6323QF1aIMrDczpYii9cN8/76d9a5b730c72121fa29b0ff38c5739e/kafka-design.png)
+
+Further considerations:
+
+- Should the subscriber release the data again in a topic instead of storing them in a db?
 
 ## The raw src data
 
