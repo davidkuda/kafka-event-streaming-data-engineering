@@ -2,25 +2,16 @@ from typing import List
 
 from confluent_kafka.admin import AdminClient, NewTopic
 
-from config_utils import get_config
+from .config_utils import get_config
 
 
-def main():
-    # create_topics()
-    delete_topics()
-
-
-def create_topics(topics: List[str] = None):
+def create_topics(topics: List[str]):
     """Create kafka topics.
     
     Link to documentation:
     - https://docs.confluent.io/platform/current/clients/confluent-kafka-python/html/index.html#confluent_kafka.admin.NewTopic
     - https://github.com/confluentinc/confluent-kafka-python/blob/master/examples/adminapi.py
     """
-
-    if topics is None:
-        topics = ["user_events", "org_events"]
-
     topic_objects = [NewTopic(topic, 1) for topic in topics]
 
     admin = AdminClient(get_config())
@@ -35,16 +26,12 @@ def create_topics(topics: List[str] = None):
             print(f"Failed to create topic {topic}: {e}")
 
 
-def delete_topics(topics: List[str] = None):
+def delete_topics(topics: List[str]):
     """Delete kafka topics.
     
     Compare to:
     - https://github.com/confluentinc/confluent-kafka-python/blob/master/examples/adminapi.py#L51
     """
-
-    if topics is None:
-        topics = ["user_events", "org_events"]
-
     admin = AdminClient(get_config())
 
     # Call delete_topics to asynchronously delete topics, a future is returned.
@@ -62,7 +49,3 @@ def delete_topics(topics: List[str] = None):
             print(f"Topic {topic} deleted")
         except Exception as e:
             print(f"Failed to delete topic {topic}: {e}")
-
-
-if __name__ == "__main__":
-    main()
