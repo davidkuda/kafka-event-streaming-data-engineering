@@ -5,6 +5,7 @@ from pprint import pprint
 import typer
 
 from log_queue_api import kafka_io
+from log_queue_api import sqlite3_io
 
 app = typer.Typer()
 
@@ -14,6 +15,7 @@ def init():
     # TODO: Implement args: def init(topics: List[str] = None):
     topics = ["user_events", "org_events"]
     kafka_io.create_topics(topics)
+    sqlite3_io.Sqlite3Connection().create_tables()
 
 
 @app.command()
