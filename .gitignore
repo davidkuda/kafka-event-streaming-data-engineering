@@ -69,3 +69,5 @@ venv*/
 # exclude data from source control (but keep the folder)
 data/*
 !data/.gitkeep
+!data/org_events.json
+!data/user_events.json
