@@ -12,3 +12,4 @@ dependencies:
   - black=21.*
   - jupyterlab
   - pandas
+  - typer
