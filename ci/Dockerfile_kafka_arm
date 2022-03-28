@@ -4,12 +4,8 @@ FROM --platform=linux/arm64/v8 ubuntu
 ENV TZ=Europe/Berlin
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Install sudo
 RUN apt-get update && apt-get install -y sudo
 
-# Create the user "kafka",
-# add kafka to sudoers
-# and setup sudo without password
 RUN adduser --disabled-password --gecos '' kafka \
     && adduser kafka sudo \
     && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
@@ -34,8 +30,8 @@ RUN curl -LO "https://dlcdn.apache.org/kafka/3.1.0/kafka_2.13-3.1.0.tgz" \
 
 RUN mv kafka_2.13-3.1.0 kafka
 
-SHELL ["/bin/bash", "-c"]
 # Install sdkman, java and scala:
+SHELL ["/bin/bash", "-c"]
 RUN  curl -s "https://get.sdkman.io" | bash 
 RUN source .sdkman/bin/sdkman-init.sh; sdk install scala; sdk install java 18-amzn
 
