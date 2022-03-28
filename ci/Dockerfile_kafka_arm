@@ -1,0 +1,41 @@
+FROM --platform=linux/arm64/v8 ubuntu
+
+# Avoid command line prompts
+ENV TZ=Europe/Berlin
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Install sudo
+RUN apt-get update && apt-get install -y sudo
+
+# Create the user "kafka",
+# add kafka to sudoers
+# and setup sudo without password
+RUN adduser --disabled-password --gecos '' kafka \
+    && adduser kafka sudo \
+    && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+USER kafka
+
+WORKDIR /home/kafka
+
+RUN sudo apt update && \
+    sudo apt install -y \
+        curl \
+        java-common \
+    && sudo rm -rf /var/lib/apt/lists/*
+
+# Install java (amazoncorretto)
+# https://docs.aws.amazon.com/corretto/latest/corretto-11-ug/generic-linux-install.html
+RUN curl -LO "https://corretto.aws/downloads/latest/amazon-corretto-11-aarch64-linux-jdk.deb" \
+   && sudo dpkg --install amazon-corretto-11-aarch64-linux-jdk.deb \
+   && rm amazon-corretto-11-aarch64-linux-jdk.deb
+
+# Install kafka
+# https://kafka.apache.org/downloads
+RUN curl -LO "https://dlcdn.apache.org/kafka/3.1.0/kafka_2.13-3.1.0.tgz" \
+    && tar -xzf kafka_2.13-3.1.0.tgz \
+    && rm kafka_2.13-3.1.0.tgz
+
+RUN mv kafka_2.13-3.1.0 kafka
+
+CMD ["bash"]
