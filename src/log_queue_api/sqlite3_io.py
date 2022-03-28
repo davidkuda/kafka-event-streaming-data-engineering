@@ -46,15 +46,15 @@ class Sqlite3Connection:
             os.remove(DB_FILE_PATH)
         return
 
-    def write_org_data(self, row_data: dict):
+    def write_org_data(self, data: dict):
         """Write a row of organization data to db."""
         self.cur.execute(
             "INSERT INTO organization_data values (?, ?, ?, ?)",
             (
-                row_data["organization_key"],
-                row_data["organization_name"],
-                row_data["organization_tier"],
-                row_data["created_at"],
+                data["organization_key"],
+                data["organization_name"],
+                data["organization_tier"],
+                data["created_at"],
             ),
         )
         self.conn.commit()
