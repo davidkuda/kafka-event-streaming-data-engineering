@@ -59,18 +59,15 @@ class Sqlite3Connection:
         )
         self.conn.commit()
 
-    def write_user_data(self, row_data: dict):
+    def create_user(self, row_data: dict):
         """Write a row of user data to db."""
-        self.cur.execute(
-            "INSERT INTO user_data values (?, ?, ?, ?, ?)",
-            (
-                row_data["organization_key"],
-                row_data["organization_name"],
-                row_data["organization_tier"],
-                row_data["created_at"],
-            ),
-        )
-        self.conn.commit()
+        raise NotImplementedError
+    
+    def update_user(self, user_name, update_data):
+        raise NotImplementedError
+    
+    def delete_user(self, user_name):
+        raise NotImplementedError
 
 
     if __name__ == "__main__":
