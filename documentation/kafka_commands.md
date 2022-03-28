@@ -10,6 +10,17 @@ bin/zookeeper-server-start.sh config/zookeeper.properties
 # start the Kafka broker service:
 bin/kafka-server-start.sh config/server.properties
 
+# or alternatively:
+docker run -it --rm \
+  --entrypoint kafka/bin/zookeeper-server-start.sh \
+  kafka-arm \
+    kafka/config/zookeeper.properties
+
+docker run -it --rm \
+  --entrypoint bin/kafka-server-start.sh \
+  kafka-arm \
+    config/server.properties
+
 # set shortcut for cmd:
 alias k=$(pwd)/bin/kafka-topics.sh
 
