@@ -1,4 +1,7 @@
-from typing import List
+import json
+from typing import List, Callable
+from pprint import pprint
+import confluent_kafka
 
 from confluent_kafka.admin import AdminClient, NewTopic
 from confluent_kafka import Producer, Consumer
@@ -62,14 +65,14 @@ def push(topic: str, key, value):
     producer.flush()
 
 
-def subscribe(topic):
-    consumer = Consumer(get_consumer_config())
+def subscribe(topic: str, function: Callable = None, *args, **kwargs):
+    consumer: confluent_kafka.Consumer = Consumer(get_consumer_config())
     consumer.subscribe([topic])
 
     # Poll for new messages from Kafka and print them.
     try:
         while True:
-            msg = consumer.poll(1.0)
+            msg = consumer.poll(2.0)
             if msg is None:
                 # Initial message consumption may take up to
                 # `session.timeout.ms` for the consumer group to
@@ -79,12 +82,12 @@ def subscribe(topic):
                 print("ERROR: %s".format(msg.error()))
             else:
                 # Extract the (optional) key and value, and print.
-
-                print(
-                    f"Consumed event from topic {msg.topic()}:\n",
-                    f"\tkey = {msg.key().decode('utf-8')}\n",
-                    f"\tvalue = {msg.value().decode('utf-8')}",
-                )
+                print(f"Consumed event from topic {msg.topic()}: key={msg.key().decode('utf-8')}, value:")
+                v = msg.value().decode("utf-8")
+                pprint(json.loads(v))
+                print("")
+                if function:
+                    function(v)
     except KeyboardInterrupt:
         pass
     finally:
