@@ -1,11 +1,11 @@
-from typing import List, Optional
 import json
-from pprint import pprint
 
 import typer
 
 from log_queue_api import kafka_io
 from log_queue_api import sqlite3_io
+from log_queue_api.event_handlers import handle_org_events, handle_user_events
+
 
 app = typer.Typer()
 
@@ -15,13 +15,16 @@ def init():
     # TODO: Implement args: def init(topics: List[str] = None):
     topics = ["user_events", "org_events"]
     kafka_io.create_topics(topics)
-    sqlite3_io.Sqlite3Connection().create_tables()
+    db = sqlite3_io.Sqlite3Connection()
+    db.create_tables()
 
 
 @app.command()
 def teardown():
     topics = ["user_events", "org_events"]
     kafka_io.delete_topics(topics)
+    db = sqlite3_io.Sqlite3Connection()
+    db.remove_existing_db_file()
 
 
 @app.command()
@@ -37,6 +40,16 @@ def produce(topic: str, key: str, value: str):
 @app.command()
 def subscribe(topic: str):
     kafka_io.subscribe(topic)
+
+
+@app.command()
+def listen_to_user_events():
+    kafka_io.subscribe("user_events", handle_user_events)
+
+
+@app.command()
+def listen_to_org_events():
+    kafka_io.subscribe("org_events", handle_org_events)
 
 
 @app.command()
