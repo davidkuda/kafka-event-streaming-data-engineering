@@ -19,6 +19,14 @@ Further considerations:
 
 - Should the subscriber release the data again in a topic instead of storing them in a db?
 
+What is still missing?
+
+- Schema and schema validation
+- An in memory connection to db (now disk io required for instantiation)
+- tests
+- Buffer that checks date / timestamp
+- buffer that prevents non org write
+
 ## The raw src data
 
 As mentionned above, there are two data sources: User Events and Organization Events. Here are two samples:
