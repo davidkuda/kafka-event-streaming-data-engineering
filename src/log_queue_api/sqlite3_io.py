@@ -30,10 +30,10 @@ class Sqlite3Connection:
         self.cur.execute(
             """
             CREATE TABLE user_data (
-                id text primary key
-                username text
-                user_email text
-                user_type text
+                id text primary key,
+                username text,
+                user_email text,
+                user_type text,
                 organizational_name text
             )
             """
