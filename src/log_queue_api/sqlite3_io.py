@@ -69,5 +69,5 @@ class Sqlite3Connection:
         raise NotImplementedError
 
 
-    if __name__ == "__main__":
-        print("hello sqlite3")
+if __name__ == "__main__":
+    print("hello sqlite3")
