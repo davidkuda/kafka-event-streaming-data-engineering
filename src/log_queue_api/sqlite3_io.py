@@ -6,14 +6,13 @@ DB_FILE_PATH = "data.sqlite3"
 
 
 class Sqlite3Connection:
-    
     def __init__(self, path: str = DB_FILE_PATH):
         self.conn = sqlite3.connect(path)
         self.cur = self.conn.cursor()
 
     def __del__(self):
         self.conn.close()
-    
+
     def create_tables(self):
         """Creates the two tables organization_data and user_data."""
         self.cur.execute(
@@ -33,12 +32,13 @@ class Sqlite3Connection:
                 username text,
                 user_email text,
                 user_type text,
-                organizational_name text
+                organizational_name text,
+                created_at text
             )
             """
         )
         self.conn.commit()
-        
+
     def remove_existing_db_file(self):
         """Removes the db file if it exists."""
         if os.path.exists(DB_FILE_PATH):
@@ -58,13 +58,23 @@ class Sqlite3Connection:
         )
         self.conn.commit()
 
-    def create_user(self, row_data: dict):
+    def create_user(self, data: dict):
         """Write a row of user data to db."""
-        raise NotImplementedError
-    
+        self.cur.execute(
+            "INSERT INTO user_data VALUES (?, ?, ?, ?, ?)",
+            (
+                data["id"],
+                data["username"],
+                data["user_email"],
+                data["user_type"],
+                data["organization_name"],
+                data["received_at"],
+            ),
+        )
+
     def update_user(self, user_name, update_data):
         raise NotImplementedError
-    
+
     def delete_user(self, user_name):
         raise NotImplementedError
 
