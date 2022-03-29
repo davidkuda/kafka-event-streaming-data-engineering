@@ -8,7 +8,7 @@ DB_FILE_PATH = "data.sqlite3"
 class Sqlite3Connection:
     
     def __init__(self, path: str = DB_FILE_PATH):
-        self.conn = sqlite3.Connection(path)
+        self.conn = sqlite3.connect(path)
         self.cur = self.conn.cursor()
 
     def __del__(self):
