@@ -25,6 +25,11 @@ def teardown():
 
 
 @app.command()
+def list_topics():
+    kafka_io.list_topics()
+
+
+@app.command()
 def produce(topic: str, key: str, value: str):
     kafka_io.push(topic, key, value)
 

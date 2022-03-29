@@ -27,6 +27,16 @@ def create_topics(topics: List[str]):
             print(f"Failed to create topic {topic}: {e}")
 
 
+def list_topics():
+    """List all topics.
+    
+    https://docs.confluent.io/platform/current/clients/confluent-kafka-python/html/index.html#confluent_kafka.admin.AdminClient.list_topics
+    """
+    admin = AdminClient(get_config())
+    topics = admin.list_topics().topics
+    pprint(topics)
+
+
 def push(topic: str, key, value):
     """Publish new content to a topic."""
     # Create Producer instance
