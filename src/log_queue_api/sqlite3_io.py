@@ -16,7 +16,6 @@ class Sqlite3Connection:
     
     def create_tables(self):
         """Creates the two tables organization_data and user_data."""
-        self.remove_existing_db_file()
         self.cur.execute(
             """
             CREATE TABLE organization_data (
