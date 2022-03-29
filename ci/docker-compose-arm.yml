@@ -2,12 +2,8 @@ version: "3"
 
 services:
   zookeeper:
-    image: kafka_arm
-    build:
-      context: .
-      dockerfile: Dockerfile_kafka_arm
-    entrypoint: kafka/bin/zookeeper-server-start.sh
-    command: kafka/config/zookeeper.properties
+    image: zookeeper
+    platform: linux/arm64/v8
     hostname: zookeeper
     container_name: zookeeper
     environment:
@@ -15,12 +11,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   broker:
-    image: kafka_arm
-    build:
-      context: .
-      dockerfile: Dockerfile_kafka_arm
-    entrypoint: kafka/bin/kafka-server-start.sh
-    command: kafka/config/server.properties
+    image: wurstmeister/kafka
+    platform: linux/arm64
     container_name: broker
     ports:
       - "9092:9092"
