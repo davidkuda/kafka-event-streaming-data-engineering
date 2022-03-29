@@ -9,3 +9,11 @@ def get_config():
     config_parser.read_file(open("config/kafka_config.ini", "r"))
     config = dict(config_parser["default"])
     return config
+
+
+def get_consumer_config():
+    config_parser = ConfigParser()
+    config_parser.read_file(open("config/kafka_config.ini", "r"))
+    config = dict(config_parser["default"])
+    config.update(config_parser["consumer"])
+    return config
