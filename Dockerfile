@@ -1,10 +1,10 @@
-ARG PYTHON_IMAGE_TAG=4.8.2
+ARG PLATFORM=linux/arm64
 
-FROM continuumio/miniconda3:${PYTHON_IMAGE_TAG}
+FROM --platform=${PLATFORM} continuumio/miniconda3
 
 LABEL maintainer="David Kuda"
 
-WORKDIR /log_queue_api
+WORKDIR /home/log_queue_api
 COPY . .
 
 RUN conda config --set channel_priority strict && \
@@ -14,6 +14,7 @@ RUN conda config --set channel_priority strict && \
 SHELL ["conda", "run", "-n", "log_queue_api_env", "/bin/bash", "-c"]
 
 RUN python setup.py install
+RUN echo "conda activate log_queue_api_env" >> ~/.bashrc
+RUN echo alias app=\"python3 src/cli.py\" >> ~/.bashrc
 
-# ENTRYPOINT doesn't use the same shell as RUN so you need the conda stuff
-ENTRYPOINT ["conda", "run", "-n", "log_queue_api_env", "python", "-OO", "-m", "log_queue_api"]
+ENTRYPOINT ["bash"]
