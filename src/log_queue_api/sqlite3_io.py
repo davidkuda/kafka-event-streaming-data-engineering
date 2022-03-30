@@ -72,7 +72,7 @@ class Sqlite3Connection:
             ),
         )
 
-    def update_user(self, user_id, update_data):
+    def update_user(self, user_id: str, update_data: str):
         """Update an existing user row."""
         self.cur.execute(
             f"""
@@ -87,7 +87,7 @@ class Sqlite3Connection:
             update_data
         )
 
-    def delete_user(self, user_id):
+    def delete_user(self, user_id: str):
         """Deletes a row."""
         self.cur.execute(
             f"""
