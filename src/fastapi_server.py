@@ -1,4 +1,8 @@
+import os
+
 from fastapi import FastAPI
+
+from log_queue_api.sqlite3_io import Sqlite3Connection
 
 app = FastAPI()
 
@@ -9,7 +13,13 @@ async def root():
 
 @app.get("/users")
 async def read_user(name: str):
+    db = Sqlite3Connection()
+    data = db.get_user(name)
     return {"name": "name"}
+
+@app.get("/fs")
+async def read_user():
+    return {"files": os.listdir("./data/")}
 
 @app.get("/users/distinct")
 async def distinct_users():
