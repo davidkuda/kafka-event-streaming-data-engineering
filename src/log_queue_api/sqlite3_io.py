@@ -71,6 +71,7 @@ class Sqlite3Connection:
                 data["received_at"],
             ),
         )
+        self.conn.commit()
 
     def update_user(self, user_id: str, update_data: str):
         """Update an existing user row."""
@@ -91,6 +92,7 @@ class Sqlite3Connection:
                 update_data["organization_name"],
             )
         )
+        self.conn.commit()
 
     def delete_user(self, user_id: str):
         """Deletes a row."""
@@ -100,6 +102,7 @@ class Sqlite3Connection:
             WHERE id = {user_id};
             """
         )
+        self.conn.commit()
 
 
 if __name__ == "__main__":
