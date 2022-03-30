@@ -32,7 +32,7 @@ class Sqlite3Connection:
                 username text,
                 user_email text,
                 user_type text,
-                organizational_name text,
+                organization_name text,
                 created_at text
             )
             """
