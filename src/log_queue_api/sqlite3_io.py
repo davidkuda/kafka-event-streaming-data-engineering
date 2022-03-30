@@ -2,7 +2,7 @@ import os
 import sqlite3
 
 
-DB_FILE_PATH = "data.sqlite3"
+DB_FILE_PATH = "./data/data.sqlite3"
 
 
 class Sqlite3Connection:
