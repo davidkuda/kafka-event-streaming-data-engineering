@@ -5,8 +5,24 @@ from .sqlite3_io import Sqlite3Connection
 
 
 def handle_user_events(event_data: str):
-    print("Handling user Event:")
-    pprint(event_data)
+
+    db = Sqlite3Connection()
+    d = json.loads(event_data)
+
+    # Validation:
+    if not d.get("username"):
+        return
+    
+    # Switch:
+    action = d["event_type"]
+    if action == "User Created":
+        db.create_user()
+    elif action == "User Updated":
+        db.update_user()
+    elif action == "User Deleted":
+        db.delete_user()
+    else:
+        print("How to handle unrecognized event types?")
 
 
 def handle_org_events(data: str):
