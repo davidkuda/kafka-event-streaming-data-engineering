@@ -2,6 +2,7 @@ import os
 from pprint import pprint
 import sqlite3
 import json
+from typing import List
 
 
 DB_FILE_PATH = "./data/data.sqlite3"
@@ -40,12 +41,6 @@ class Sqlite3Connection:
             """
         )
         self.conn.commit()
-
-    def remove_existing_db_file(self):
-        """Removes the db file if it exists."""
-        if os.path.exists(DB_FILE_PATH):
-            os.remove(DB_FILE_PATH)
-        return
 
     def write_org_data(self, data: dict):
         """Write a row of organization data to db."""
@@ -106,7 +101,7 @@ class Sqlite3Connection:
         )
         self.conn.commit()
     
-    def get_user(self, username: str):
+    def get_user(self, username: str) -> List[dict]:
         """Joins both tables and returns user by name.
                 
         return example:
@@ -130,18 +125,28 @@ class Sqlite3Connection:
             WHERE user_data.username LIKE '{username}';
             """
         ).fetchall()
-        pprint(data)
+        objects = []
+        for d in data:
+            objects.append({
+                "username": d[0],
+                "user_type": d[1],
+                "organization_name": d[2],
+                "organzation_tier": d[3]
+            })
+        return objects
         
 
 
 if __name__ == "__main__":
     print("hello sqlite3")
+    if os.path.exists("manual_test.db"):
+        os.remove("manual_test.db")
     test_db = Sqlite3Connection("manual_test.db")
     test_db.create_tables()
     org_data = """
     {
         "organization_key": "ff3959a49ac10fc70181bc00e308fbeb",
-        "organization_name": "Super Mario",
+        "organization_name": "Metal Gear Solid",
         "organization_tier": "Medium",
         "created_at": "2018-01-24 17:28:09.000000"
     }
@@ -173,6 +178,6 @@ if __name__ == "__main__":
     d2 = json.loads(user_data_2)
     test_db.update_user(d2.get("id"), d2)
 
-    test_db.delete_user("069feb770fe581acc9d3313d59780196")
+    # test_db.delete_user("069feb770fe581acc9d3313d59780196")
 
-
+    test_db.get_user("Snake")
