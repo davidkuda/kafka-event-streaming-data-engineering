@@ -5,6 +5,11 @@ from .sqlite3_io import Sqlite3Connection
 
 
 def handle_user_events(event_data: str):
+    """Load new org event messages to database.
+
+    Args:
+        data (str): String representation of json.
+    """
 
     db = Sqlite3Connection()
     d = json.loads(event_data)
@@ -12,7 +17,7 @@ def handle_user_events(event_data: str):
     # Validation:
     if not d.get("username"):
         return
-    
+
     # Switch:
     action = d.pop("event_type")
 
@@ -32,13 +37,12 @@ def handle_user_events(event_data: str):
 
 
 def handle_org_events(data: str):
-        """Load new org event messages to database.
-        
-        Args:
-            data (str): String representation of json.
-            db_conn (sqlite3.Connection): Conn to db that has method "write_org_dat
-        """
-        d = json.loads(data)
-        db = Sqlite3Connection()
-        db.write_org_data(d)
-        print("Written org data to db.")
+    """Load new org event messages to database.
+
+    Args:
+        data (str): String representation of json.
+    """
+    d = json.loads(data)
+    db = Sqlite3Connection()
+    db.write_org_data(d)
+    print("Written org data to db.")
