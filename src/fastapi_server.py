@@ -10,13 +10,12 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return "Please send a request to /users?name=Snake"
 
 @app.get("/users")
 async def read_user(name: str):
     db = Sqlite3Connection()
-    data = db.get_user(name)
-    return json.dumps(data)
+    return db.get_user(name)
 
 @app.get("/fs")
 async def read_user():
