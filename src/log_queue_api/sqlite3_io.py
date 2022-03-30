@@ -1,4 +1,5 @@
 import os
+from pprint import pprint
 import sqlite3
 import json
 
@@ -104,6 +105,33 @@ class Sqlite3Connection:
             """
         )
         self.conn.commit()
+    
+    def get_user(self, username: str):
+        """Joins both tables and returns user by name.
+                
+        return example:
+        {
+            "username": "Snake",
+            "user_type": "Admin",
+            "organization_name": "Metal Gear Solid",
+            "organization_tier": "Medium"
+        }
+        """
+        data = self.cur.execute(
+            f"""
+            SELECT
+                username,
+                user_type,
+                user_data.organization_name,
+                organization_tier
+            FROM user_data 
+            JOIN organization_data 
+            ON user_data.organization_name = organization_data.organization_name 
+            WHERE user_data.username LIKE '{username}';
+            """
+        ).fetchall()
+        pprint(data)
+        
 
 
 if __name__ == "__main__":
