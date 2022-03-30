@@ -107,3 +107,43 @@ class Sqlite3Connection:
 
 if __name__ == "__main__":
     print("hello sqlite3")
+    test_db = Sqlite3Connection("manual_test.db")
+    test_db.create_tables()
+    org_data = """
+    {
+        "organization_key": "ff3959a49ac10fc70181bc00e308fbeb",
+        "organization_name": "Super Mario",
+        "organization_tier": "Medium",
+        "created_at": "2018-01-24 17:28:09.000000"
+    }
+    """
+    test_db.write_org_data(json.loads(org_data))
+    # Here you would assert that data is in the table
+    user_data_1 = """
+    {
+        "id": "069feb770fe581acc9d3313d59780196",
+        "username": "Snake",
+        "user_email": "snake@outerheaven.com",
+        "user_type": "Admin",
+        "organization_name": "Metal Gear Solid",
+        "received_at": "2020-12-08 20:03:16.759617"
+    }
+    """
+    test_db.create_user(json.loads(user_data_1))
+    # Assert data in db
+    user_data_2 = """
+    {
+        "id": "069feb770fe581acc9d3313d59780196",
+        "username": "Snake",
+        "user_email": "snake@mgs.com",
+        "user_type": "Adminator",
+        "organization_name": "Metal Gear Solid",
+        "received_at": "2020-12-08 20:03:16.759617"
+    }
+    """
+    d2 = json.loads(user_data_2)
+    test_db.update_user(d2.get("id"), d2)
+
+    test_db.delete_user("069feb770fe581acc9d3313d59780196")
+
+
