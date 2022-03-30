@@ -72,11 +72,29 @@ class Sqlite3Connection:
             ),
         )
 
-    def update_user(self, user_name, update_data):
-        raise NotImplementedError
+    def update_user(self, user_id, update_data):
+        """Update an existing user row."""
+        self.cur.execute(
+            f"""
+            UPDATE user_data
+            SET username = ? ,
+                user_email = ? ,
+                user_type = ? ,
+                organizational_name = ?
+            WHERE
+                id = {user_id};
+            """,
+            update_data
+        )
 
-    def delete_user(self, user_name):
-        raise NotImplementedError
+    def delete_user(self, user_id):
+        """Deletes a row."""
+        self.cur.execute(
+            f"""
+            DELETE FROM user_data
+            WHERE id = {user_id};
+            """
+        )
 
 
 if __name__ == "__main__":
