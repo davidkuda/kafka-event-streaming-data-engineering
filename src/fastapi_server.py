@@ -1,4 +1,5 @@
 import os
+import json
 
 from fastapi import FastAPI
 
@@ -15,7 +16,7 @@ async def root():
 async def read_user(name: str):
     db = Sqlite3Connection()
     data = db.get_user(name)
-    return {"name": "name"}
+    return json.dumps(data)
 
 @app.get("/fs")
 async def read_user():
