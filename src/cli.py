@@ -12,7 +12,6 @@ app = typer.Typer()
 
 @app.command()
 def init():
-    # TODO: Implement args: def init(topics: List[str] = None):
     topics = ["user_events", "org_events"]
     kafka_io.create_topics(topics)
     db = sqlite3_io.Sqlite3Connection()
