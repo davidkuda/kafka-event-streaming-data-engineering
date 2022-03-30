@@ -61,7 +61,7 @@ class Sqlite3Connection:
     def create_user(self, data: dict):
         """Write a row of user data to db."""
         self.cur.execute(
-            "INSERT INTO user_data VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO user_data values (?, ?, ?, ?, ?, ?)",
             (
                 data["id"],
                 data["username"],
