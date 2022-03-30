@@ -14,13 +14,19 @@ def handle_user_events(event_data: str):
         return
     
     # Switch:
-    action = d["event_type"]
+    action = d.pop("event_type")
+
     if action == "User Created":
-        db.create_user()
+        db.create_user(d)
+
     elif action == "User Updated":
-        db.update_user()
+        d.pop("received_at")
+        user_id = d.pop("id")
+        db.update_user(user_id, d)
+
     elif action == "User Deleted":
-        db.delete_user()
+        db.delete_user(d["id"])
+
     else:
         print("How to handle unrecognized event types?")
 

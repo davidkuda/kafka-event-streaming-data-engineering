@@ -80,11 +80,16 @@ class Sqlite3Connection:
             SET username = ? ,
                 user_email = ? ,
                 user_type = ? ,
-                organizational_name = ?
+                organization_name = ?
             WHERE
                 id = {user_id};
             """,
-            update_data
+            (
+                update_data["username"],
+                update_data["user_email"],
+                update_data["user_type"],
+                update_data["organization_name"],
+            )
         )
 
     def delete_user(self, user_id: str):
