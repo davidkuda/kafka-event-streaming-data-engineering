@@ -41,6 +41,12 @@ class Sqlite3Connection:
             """
         )
         self.conn.commit()
+    
+    def remove_existing_db_file(self):
+        """Removes the db file if it exists."""
+        if os.path.exists(DB_FILE_PATH):
+            os.remove(DB_FILE_PATH)
+        return
 
     def write_org_data(self, data: dict):
         """Write a row of organization data to db."""
