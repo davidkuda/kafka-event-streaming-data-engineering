@@ -83,7 +83,7 @@ class Sqlite3Connection:
                 user_type = ? ,
                 organization_name = ?
             WHERE
-                id = {user_id};
+                id = '{user_id}';
             """,
             (
                 update_data["username"],
@@ -99,7 +99,7 @@ class Sqlite3Connection:
         self.cur.execute(
             f"""
             DELETE FROM user_data
-            WHERE id = {user_id};
+            WHERE id = '{user_id}';
             """
         )
         self.conn.commit()
