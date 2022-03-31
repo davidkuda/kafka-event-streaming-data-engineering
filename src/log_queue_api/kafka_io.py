@@ -61,7 +61,8 @@ def push(topic: str, key, value):
                 f"\tvalue = {msg.value().decode('utf-8')}",
             )
 
-    producer.produce(topic, value, key, callback=delivery_callback)
+    # producer.produce(topic, value, key, callback=delivery_callback)
+    producer.produce(topic, value, key)
 
     # Block until the messages are sent.
     producer.poll(10000)
@@ -111,17 +112,19 @@ def subscribe_count_unique_visitors():
         while True:
             msg = consumer.poll(1.0)
             if msg is None:
-                print("Waiting...")
+                pass
 
             elif msg.error():
                 print("ERROR: %s".format(msg.error()))
 
             else:
-                print("Consuming new message")
                 v = msg.value().decode("utf-8")
                 d = json.loads(v)
                 ts = d["ts"]
                 uid = d["uid"]
+
+                # utc_ts = datetime.utcfromtimestamp(ts)
+                # print(utc_ts, "Consuming new message")
     
                 if ts % 60 != 0:
                     if window.get(uid):
@@ -136,13 +139,13 @@ def subscribe_count_unique_visitors():
                     print("count: ", window_count)
                     print("")
                     data = json.dumps({
-                        "datetime": utc_ts, 
+                        "datetime": ts, 
                         "count": window_count
                     })
                     window = {}
                     window_count = 0
                     previous_ts = ts
-                    push("visits_per_minute", utc_ts, data)
+                    push("visits_per_minute", str(utc_ts), data)
 
     except KeyboardInterrupt:
         pass
