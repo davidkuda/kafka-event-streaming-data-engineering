@@ -2,7 +2,7 @@ import json
 
 
 def yield_ts_and_uid(
-    json_file_path: str = "data/doodle_data.json",
+    json_file_path: str = "data/unique_visits_data.json",
     limit: int = 10000,
     skip_equals: bool = True,
 ):
