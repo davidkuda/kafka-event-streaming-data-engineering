@@ -36,17 +36,22 @@ def subscribe(topic: str):
 
 @app.command()
 def subscribe_to_website_visits():
-    kafka_io.subscribe("website_visits")
+    kafka_io.subscribe_count_unique_visitors()
 
 
 @app.command()
-def stream_website_visits(*args, **kwargs):
-    for ts, uid in yield_ts_and_uid(path=kwargs.get("path"), limit=kwargs.get("limit")):
+def subscribe_to_unique_visits_per_min():
+    kafka_io.subscribe("visits_per_minute")
+
+
+@app.command()
+def stream_website_visits():
+    for ts, uid in yield_ts_and_uid(limit=10000):
         data = json.dumps({
             "ts": ts,
             "uid": uid,
         })
-        kafka_io.push("website_visits", ts, data)
+        kafka_io.push("website_visits", str(ts), data)
 
 
 if __name__ == "__main__":
