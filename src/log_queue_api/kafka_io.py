@@ -1,7 +1,7 @@
 import json
 from typing import List, Callable
 from pprint import pprint
-import confluent_kafka
+from datetime import datetime
 
 from confluent_kafka.admin import AdminClient, NewTopic
 from confluent_kafka import Producer, Consumer
@@ -66,7 +66,7 @@ def push(topic: str, key, value):
 
 
 def subscribe(topic: str, function: Callable = None, *args, **kwargs):
-    consumer: confluent_kafka.Consumer = Consumer(get_consumer_config())
+    consumer: Consumer = Consumer(get_consumer_config())
     consumer.subscribe([topic])
 
     # Poll for new messages from Kafka and print them.
@@ -92,6 +92,59 @@ def subscribe(topic: str, function: Callable = None, *args, **kwargs):
         pass
     finally:
         # Leave group and commit final offsets
+        consumer.close()
+
+
+def subscribe_count_unique_visitors():
+    consumer: Consumer = Consumer(get_consumer_config())
+    consumer.subscribe(["website_visits"])
+    
+    # ? How could you pass these outter scope values as args in order to make function generic?
+    window = {}
+    window_count = 0
+    previous_ts: int = 1
+
+    try:
+        while True:
+            msg = consumer.poll(1.0)
+            if msg is None:
+                print("Waiting...")
+
+            elif msg.error():
+                print("ERROR: %s".format(msg.error()))
+
+            else:
+                print("Consuming new message")
+                v = msg.value().decode("utf-8")
+                d = json.loads(v)
+                ts = d["ts"]
+                uid = d["uid"]
+    
+                if ts % 60 != 0:
+                    if window.get(uid):
+                        continue
+                    window[uid] = 1
+                    window_count += 1
+
+                if ts % 60 == 0 and ts - previous_ts != 0:
+                    print("A minute finished:")
+                    utc_ts = datetime.utcfromtimestamp(ts)
+                    print("date: ", utc_ts)
+                    print("count: ", window_count)
+                    print("")
+                    data = json.dumps({
+                        "datetime": utc_ts, 
+                        "count": window_count
+                    })
+                    window = {}
+                    window_count = 0
+                    previous_ts = ts
+                    push("visits_per_minute", utc_ts, data)
+
+    except KeyboardInterrupt:
+        pass
+
+    finally:
         consumer.close()
 
 
