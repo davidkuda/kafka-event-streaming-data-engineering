@@ -40,8 +40,8 @@ def subscribe_to_website_visits():
 
 
 @app.command()
-def stream_website_visits():
-    for ts, uid in yield_ts_and_uid():
+def stream_website_visits(*args, **kwargs):
+    for ts, uid in yield_ts_and_uid(path=kwargs.get("path"), limit=kwargs.get("limit")):
         data = json.dumps({
             "ts": ts,
             "uid": uid,
