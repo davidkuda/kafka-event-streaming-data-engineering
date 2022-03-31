@@ -3,7 +3,7 @@ import json
 import typer
 
 from log_queue_api import kafka_io
-from log_queue_api.event_handlers import handle_org_events, handle_user_events
+from log_queue_api.json_io import yield_ts_and_uid
 
 
 app = typer.Typer()
@@ -35,16 +35,18 @@ def subscribe(topic: str):
 
 
 @app.command()
-def listen_to_user_events():
-    kafka_io.subscribe("user_events", handle_user_events)
+def subscribe_to_website_visits():
+    kafka_io.subscribe("website_visits")
 
 
 @app.command()
-def stream_org_events():
-    with open("./data/org_events.json") as f:
-        j = json.load(f)
-    for i in j:
-        kafka_io.push("org_events", i["created_at"], json.dumps(i))
+def stream_website_visits():
+    for ts, uid in yield_ts_and_uid():
+        data = json.dumps({
+            "ts": ts,
+            "uid": uid,
+        })
+        kafka_io.push("website_visits", ts, data)
 
 
 if __name__ == "__main__":
