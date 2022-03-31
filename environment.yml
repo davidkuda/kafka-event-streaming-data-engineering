@@ -10,3 +10,4 @@ dependencies:
   - uvicorn[standard]
   - pydantic
   - python-confluent-kafka 
+  - typer
