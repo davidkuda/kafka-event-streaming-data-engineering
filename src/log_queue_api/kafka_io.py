@@ -37,7 +37,10 @@ def list_topics():
     """
     admin = AdminClient(get_config())
     topics = admin.list_topics().topics
-    pprint(topics)
+    if topics is None:
+        print("There are no topics yet in Kafka!")
+    else:
+        pprint(topics)
 
 
 def push(topic: str, key, value):
