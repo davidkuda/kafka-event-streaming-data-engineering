@@ -3,7 +3,7 @@
 ![system design overview](https://images.ctfassets.net/pedj0c0bs6fa/1GXGRyWeCBwvPw6d1Pym1T/2f7080d1ce6b80491fd114fe31abd4a9/kafka_ts_uid.drawio__1_.png)
 
 - We have a website, and we track how many visits we have. Each visit is a json object.
-- The raw data has lots of key value pairs. Please have a look at `data/sample_data.json` to get a feeling for the data.
+- The raw data has lots of key value pairs. Please have a look at [`data/sample_data.json`](./data/sample_data.json) to get a feeling for the data.
 - From the data set, we are only interested in the timestamp and the uid.
 - With these values, we want to find out how many unique visitors we have.
 - An initial analysis examines how many visitors we have per minute.
@@ -20,7 +20,7 @@ def count_uniques_per_min():
     previous_ts: int = 1
 
     while True:
-        ts, uid = fetch_data()
+        ts, uid = stream.dequeue()
 
         if ts % 60 != 0:
             if window.get(uid):
@@ -72,7 +72,7 @@ We would need to publish the information every day to a topic, so we would need 
 
 ## How to run the application and execute the code
 
-Make sure that you have a (dev) Kafka instance that you can communicate to according to `./config/kafka_config.ini` (in our case:``localhost:909``). The main entrypoint to the application is the file `./src/cli.py`. You can see a walk through the functionality in `./notebooks/walktrhough.ipynb`. 
+Make sure that you have a (dev) Kafka instance that you can communicate to according to `./config/kafka_config.ini` (in our case:``localhost:9092`). The main entrypoint to the application is the file `./src/cli.py`. You can see a walk through the functionality in [`./notebooks/walktrhough.ipynb`](./notebooks/walktrhough.ipynb). 
 
 You can run `docker-compose up` to start kafka. 
 
